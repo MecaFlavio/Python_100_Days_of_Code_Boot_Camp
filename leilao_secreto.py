@@ -6,8 +6,18 @@ nome = str
 oferta = float
 dicionario_de_ofertas = {}
 continuar = True
-maior = 0
-ganhador = str
+
+
+def maior_oferta(ofertantes):
+    print(artes.logo_leilão)
+    maior = 0
+    ganhador = str
+    for k, v in ofertantes.items():
+        if v > maior:
+            ganhador = k
+            maior = v
+    print(f'O Ganhador é {ganhador} com a oferta de {maior}')
+
 
 while continuar:
     print(artes.logo_leilão)
@@ -24,11 +34,4 @@ while continuar:
         system("cls")
         continuar = False
 
-maior = oferta
-for k in dicionario_de_ofertas:
-    if dicionario_de_ofertas[k] > maior:
-        ganhador = k
-        maior = dicionario_de_ofertas[k]
-
-print(artes.logo_leilão)
-print(f'O Ganhador é {ganhador} com a oferta de {maior}')
+maior_oferta(dicionario_de_ofertas)
