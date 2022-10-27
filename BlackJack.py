@@ -1,6 +1,6 @@
 import random
-import emoji
 import artes
+import emoji
 
 
 def resultado(ganhou):
@@ -49,6 +49,17 @@ def separador():
     print(50 * '=')
 
 
+def dar_cartas():
+    """
+    Retorna uma carta aleatória do baralho.
+    :return:Retorna uma carta aleatória do baralho.
+    """
+    # Cartas disponiveis para o jogo
+    cartas = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
+    carta = random.choice(cartas)
+    return carta
+
+
 def blackjack():
     """
     Função Recursiva, que roda o programa.
@@ -57,10 +68,14 @@ def blackjack():
     global fim_de_jogo, turno_jogador, pontuação_jogador, pontuação_computador, computador_mão, jogador_mão
     pontuação_jogador = 0
     pontuação_computador = 0
+    jogador_mão = []
+    computador_mão = []
     fim_de_jogo = False
     turno_jogador = True
-    jogador_mão = [random.choice(cartas), random.choice(cartas)]  # Escolhe cartas iniciais ao jogador.
-    computador_mão = [random.choice(cartas), random.choice(cartas)] # Escolhe cartas iniciais ao Computador.
+    # Distribui duas cartas iniciais ao computador e jogador
+    for i in range(2):
+        jogador_mão.append(dar_cartas())
+        computador_mão.append(dar_cartas())
     # Loop principal do jogo.
     while not fim_de_jogo:
         # Loop do turno do jogador
@@ -68,23 +83,29 @@ def blackjack():
             # Mantem a soma das cartas atualizadas a cada loop.
             soma_pontuação()
             # Verifica o BlackJack inicial do computador.
-            if computador_mão.count(11) == 1 and computador_mão.count(10) == 1 and sum(computador_mão) == 21:
+            if sum(computador_mão) == 21 and len(computador_mão) == 2:
+            #if computador_mão.count(11) == 1 and computador_mão.count(10) == 1 and sum(computador_mão) == 21:
                 fim_de_jogo = True
                 resultado(2)
                 # Para loop do turno jo jogador
                 break
             # Verificaca o Blackjack inicial do Jogador
-            elif jogador_mão.count(11) == 1 and jogador_mão.count(10) == 1 and sum(jogador_mão) == 21:
+            elif sum(jogador_mão) == 21 and len(jogador_mão) == 2:
+            #elif jogador_mão.count(11) == 1 and jogador_mão.count(10) == 1 and sum(jogador_mão) == 21:
                 fim_de_jogo = True
                 resultado(1)
                 # Para turno do loop do jogador
                 break
             # Verifica Ases na mão do jogador e caso seja maior que 21 os 11 viram 1
-            if pontuação_jogador > 21:
-                for i, v in enumerate(jogador_mão):
-                    if v == 11:
-                        jogador_mão[i] = 1
-                        soma_pontuação()
+            # if pontuação_jogador > 21:
+            #     for i, v in enumerate(jogador_mão):
+            #         if v == 11:
+            #             jogador_mão[i] = 1
+            #             soma_pontuação()
+            if 11 in jogador_mão and pontuação_jogador > 21:
+                jogador_mão.remove(11)
+                jogador_mão.append(1)
+                soma_pontuação()
             # Caso mesmo com Ases valendo 1 a soma passe de 21 o jogador perde
             if pontuação_jogador > 21:
                 fim_de_jogo = True
@@ -95,12 +116,12 @@ def blackjack():
             print(f'Suas Cartas são {jogador_mão}, um total de {pontuação_jogador}')
             print(f'Primeira Carta do Computador {computador_mão[0]}')
             separador()
-            # Define se o turno do jagador terina
+            # Define se o turno do jagador termina
             tirar_cartas = resposta_jogador('Você Deseja tirar mais uma carta?\nDigite (S) ou (N): ')
             separador()
             if tirar_cartas == 'S':
                 # Indexa mais uma carta a mão do jogador
-                jogador_mão.append(random.choice(cartas))
+                jogador_mão.append(dar_cartas())
             elif tirar_cartas == 'N':
                 # Para o loop do turno do jogador
                 turno_jogador = False
@@ -110,7 +131,8 @@ def blackjack():
         # Inicia turno do computador
         while pontuação_computador < 17:
             # Indexa cartas a mão do computador
-            computador_mão.append(random.choice(cartas))
+            # computador_mão.append(random.choice(cartas))
+            computador_mão.append(dar_cartas())
             soma_pontuação()
         if pontuação_computador > 21:
             # Define vitoria
@@ -134,8 +156,8 @@ def blackjack():
         print('Até a proxima. Obrigado por jogar.')
 
 
-# Cartas Disponiveis do jogo
-cartas = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
+jogador_mão = []
+computador_mão = []
 print(artes.logo_blackjack)
 separador()
 # Aguarda reposta do jogador para inicia jogo
