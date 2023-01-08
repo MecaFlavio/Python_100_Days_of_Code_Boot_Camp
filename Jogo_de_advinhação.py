@@ -3,6 +3,11 @@ from artes import logo_adivinhe_numero
 
 
 def adivinha(n):
+    """
+    Recebe o numero randomico compara ao input e retorma uma subtração a variavel tentativa
+    :param n: numero inteiro randomico
+    :return: -1 a variavel tantativa ou True a variavel fim
+    """
     print(f'Voce tem {tentativas} tentativas')
     global fim
     sugestao = int(input('Adivinhe o numero entre 1 e 100: '))
